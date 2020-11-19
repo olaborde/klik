@@ -8,6 +8,25 @@ from main.models import Company, User, Comment
 def index():
     return render_template('index.html')
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route("/profile")
+def profile():
+    return render_template('profile.html')
+
+@app.route("/signup")
+def signup():
+    return render_template('signup.html')
+
+@app.route("/login")
+def login():
+    return render_template('login.html')
 
 # CRUD for comments 
 @app.route("/comments")
