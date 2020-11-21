@@ -11,8 +11,12 @@
     <title>KliK</title>
   </head>
   <body>
-    {% block content %}
-    {% endblock %}
+    <div class="container-fluid">
+      {% include 'navigation.html' %}
+      {% block content %}
+      {% endblock %}
+    </div>
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 
