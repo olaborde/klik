@@ -1,8 +1,9 @@
 
 from datetime import datetime # newly added
 from main import db
+from flask_login import UserMixin # to manage the session 
 
-class User( db.Model ):
+class User( db.Model, UserMixin ):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     fname = db.Column(db.String(100))
@@ -31,7 +32,7 @@ company_comment = db.Table('company_comment',
        db.Column('comment_id', db.Integer, db.ForeignKey('comment.id'), primary_key=True )
 )
 
-class Company( db.Model ):
+class Company( db.Model, UserMixin ):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     name = db.Column(db.String(100))
