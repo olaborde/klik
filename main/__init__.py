@@ -3,9 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime # newly added
 from flask_login import LoginManager
-app = Flask(__name__)
 
+app = Flask(__name__)
 app.config["DEBUG"] = True
+app.config['SECRET_KEY'] = 'sdfhjjguj^%&%786tfg7d6c7dfgfiudyfd87'
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

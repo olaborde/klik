@@ -18,10 +18,10 @@
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link" href="{{ url_for('login') }}">Login</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/signup">Sign Up</a>
+          <a class="nav-link" href="{{ url_for('signup_user') }}">Sign Up</a>
         </li>
       {% endif %}
         <li class="nav-item">

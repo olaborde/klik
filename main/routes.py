@@ -1,6 +1,6 @@
 
 from flask import render_template, url_for, flash, redirect, request, session 
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from main import app, db, login_manager
 from main.models import Company, User, Comment
 
@@ -18,16 +18,18 @@ def about():
     return render_template('about.html')
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
     return render_template('dashboard.html')
 
 @app.route("/profile")
+@login_required
 def profile():
-    return render_template('profile.html')
+    return render_template('profile.html', user = current_user)
 
-@app.route("/signup")
-def signup():
-    return render_template('signup.html')
+# @app.route("/signup")
+# def signup():
+#     return render_template('signup.html')
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -35,7 +37,7 @@ def login():
         username = request.form.get("username", "")
         password = request.form.get("password", "")
         user = User.query.filter_by( username = username, password = password ).first()
-        if user is not None:
+        if user:
             login_user(user)
             return redirect("/profile")
         else:
@@ -104,25 +106,29 @@ def all_users():
     allUsers = User.query.all()
     return render_template("users.html", users = allUsers)
 
-@app.route("/users/create", methods=["POST"])
-def create_users():
-    # picture = request.form.get('picture', "")
-    fname = request.form.get('fname', "")
-    lname = request.form.get('lname', "")
-    bio = request.form.get('bio', "")
-    username = request.form.get('username', "")
-    email = request.form.get('email', "")
-    password = request.form.get('password', "")
+@app.route('/signup_user', methods=['GET', 'POST'])
+def signup_user():
+    if request.method == "POST":
+        # return redirect(url_for('index'))
+        picture = request.form.get('picture', "")
+        fname = request.form.get('fname', "")
+        lname = request.form.get('lname', "")
+        bio = request.form.get('bio', "")
+        username = request.form.get('username', "")
+        email = request.form.get('email', "")
+        password = request.form.get('password', "")
    
-    newUser= User(fname, lname, bio, username, email, password)
-    db.session.add(newUser)
-    db.session.commit()
-    return redirect("/users/") 
+        newUser= User(picture, fname, lname, bio, username, email, password)
+        db.session.add(newUser)
+        db.session.commit()
+        return redirect("/login") 
+    else:
+        return render_template('signup.html')    
 
 # read a single comment
 @app.route("/users/<id>")
 def get_user(id):
-    user = User.query.get( int(id) )
+    user = User.query.get( id )
     #TODO: Create view for comment
     return render_template("comment.html", user = user)     
 
