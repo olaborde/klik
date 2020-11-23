@@ -7,6 +7,7 @@
 }
 
 .form-wrapper {
+  
     margin-top: 10%;
     min-width: 40%;
     margin-bottom: 10%;
@@ -21,11 +22,15 @@
 .last-name{
     margin-left: 0.5em;
 }
+.gradient-styles{
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(121,76,9,1) 46%, rgba(0,212,255,1) 100%);
+
+}  
 </style>
 
-  
-<app-navbar></app-navbar>
-<div class="container-wrapper container d-flex justify-content-center align-items-center">
+
+<div class="container-wrapper container d-flex justify-content-center align-items-center gradient-styles">
   <div class="form-wrapper text-center">
     <h2 class="text-center">Sign Up</h2>
     <form action="/signup_user" method="POST">
