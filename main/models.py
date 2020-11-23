@@ -1,22 +1,24 @@
 
 from datetime import datetime # newly added
 from main import db
+from flask_login import UserMixin # to manage the session 
 
-class User( db.Model ):
+class User( UserMixin, db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     fname = db.Column(db.String(100))
     lname = db.Column(db.String(100))
     bio = db.Column(db.Text())
     username = db.Column(db.String(10))
-    email = db.Column(db.String(50), nullable=False, unique=True)
+    email = db.Column(db.String(50))
     password = db.Column(db.String(20))
 
     # relationships
     # company = db.relationship( "Company", backref="user" )
     comments = db.relationship( "Comment", backref="user" )
     # orders = db.relationship('Order', backref='customer')
-    def __init__(self, fname, lname, bio, username, email, password):
+    def __init__(self, picture, fname, lname, bio, username, email, password):
+        self.picture = picture
         self.fname = fname
         self.lname = lname
         self.bio = bio
@@ -31,7 +33,7 @@ company_comment = db.Table('company_comment',
        db.Column('comment_id', db.Integer, db.ForeignKey('comment.id'), primary_key=True )
 )
 
-class Company( db.Model ):
+class Company( UserMixin, db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     name = db.Column(db.String(100))
