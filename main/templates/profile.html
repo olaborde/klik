@@ -3,8 +3,241 @@
 <br>
 <br>
 <br>
-<div>
-    <h1>Profile</h1>
-    <p>Welcome {{ current_user.fname }}</p>
+<style>
+ body{
+  /* background: -webkit-linear-gradient(left, #3931af, #00c6ff); */
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(121,76,9,1) 46%, rgba(0,212,255,1) 100%);
+}
+button{
+    display: block;
+    width: 100%;
+    padding-right: 80px;
+    margin: 14px 0;
+
+}
+
+
+</style>
+<div class="container emp-profile">
+    
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="{{current_user.picture}}" alt=""/>
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                            <h5>
+                                {{current_user.fname}} {{current_user.lname}}
+                            </h5>
+                            <h6>
+                                {{current_user.bio}}
+                            </h6>
+                            <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Reviews</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-6">
+                        <button onclick="editProfile()" class="profile-edit-btn btn btn-primary" name="btnAddMore" >Edit Profile</button>
+
+                    </div>
+                    <div class="col-6">
+                        <form action="/users/{{current_user.id}}/delete" method="post">
+                            <button class="profile-edit-btn btn btn-danger" name="btnAddMore" >Delete</button>
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+        
+            
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <p>WORK LINK</p>
+                    <a href="">Website Link</a><br/>
+                    <a href="">Bootsnipp Profile</a><br/>
+                    <div class="col-md-2">
+               
+            </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active"  id="profile_view" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Username</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{current_user.username}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{current_user.fname}} {{current_user.lname}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{current_user.email}}</p>
+                                    </div>
+                                    
+                                </div>
+                               
+                    </div>
+
+                    <div class="tab-pane fade show active" id="profile_edit" id="home"  style="display:none" role="tabpanel" aria-labelledby="home-tab">
+                        <form action="/users/update" method="POST">
+                        <input type="hidden" value="{{current_user.id}}" name="user_id">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Picture URL</label>
+                          </div>
+                          <div class="col-md-6">
+                            <input type="text" class="form-control" id="picture-input2" value="{{current_user.picture}}" name="picture">
+                          </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Username</label>
+                          </div>
+                          <div class="col-md-6">
+                            <input type="text" class="form-control" id="username-input2" value="{{current_user.username}}" name="username">
+                          </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                          <label>Name</label>
+                          </div>
+                         <div class="col-md-6">
+                          <p> <input type="text" class="form-control" id="first-name-input2" value="{{current_user.fname}}" name="fname"> <input type="text" class="form-control" id="first-name-input" value="{{current_user.lname}}" name="lname"></p>
+                          </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Bio</label>
+                          </div>
+                          <div class="col-md-6">
+                            <input type="text" class="form-control" id="bio-input2" value="{{current_user.bio}}" name="bio">
+                          </div>
+                        </div>
+                        
+                        <div class="row">
+                        <div class="col-md-6">
+                        <label>Email</label>
+                         </div>
+                         <div class="col-md-6">
+                          <!-- <p>{{current_user.email}}</p> -->
+                          <input type="email" class="form-control" id="email-input2" value="{{current_user.email}}" name="email">
+                        
+                          </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                          <label>Password</label>
+                          </div>
+                            <div class="col-md-6">
+                            
+                              <input type="password" class="form-control" id="password-input2" value="Password" name="password">
+                          </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                             
+       
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                          
+                            </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>    
+
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Experience</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Expert</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Hourly Rate</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>10$/hr</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Total Projects</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>230</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>English Level</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Expert</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Availability</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>6 months</p>
+                                    </div>
+                                </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Your Bio</label><br/>
+                                <p>Your detail description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+              
 </div>
 {% endblock %}
+{% block scripts %} <script src="/static/js/customScripts.js">
+    console.log("test")
+   function editProfile(){
+    console.log("You clikc")
+    }
+</script>{% endblock %} 

@@ -45,6 +45,20 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route("/company_login", methods=['GET', 'POST'])
+def company_login():
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        company = Company.query.filter_by( username = username, password = password ).first()
+        if company:
+            login_user(company)
+            return redirect("/dashboard")
+        else:
+            return redirect("/login")    
+    else:
+        return render_template('login.html')
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -123,7 +137,31 @@ def signup_user():
         db.session.commit()
         return redirect("/login") 
     else:
-        return render_template('signup.html')    
+        return render_template('signup.html') 
+
+#Update User
+@app.route("/users/update",  methods=["POST"])    
+def update_user():
+    user_id = request.form.get("user_id")   
+    updated_picture = request.form.get('picture')
+    updated_fname = request.form.get('fname')
+    updated_lname = request.form.get('lname')
+    updated_bio = request.form.get('bio')
+    updated_username = request.form.get('username')
+    updated_email = request.form.get('email')
+    updated_password = request.form.get('password') 
+
+    user = User.query.filter_by(id=user_id).first()  
+    user.picture = updated_picture
+    user.fname = updated_fname
+    user.lname = updated_lname
+    user.bio = updated_bio
+    user.username = updated_username
+    user.email = updated_email
+    user.password = updated_password
+    db.session.commit()
+    return redirect('/profile')
+
 
 # read a single comment
 @app.route("/users/<id>")
@@ -156,7 +194,7 @@ def delete_user(id):
     user = User.query.get( int(id) )
     db.session.delete(user)
     db.session.commit()
-    return redirect("/comments/")
+    return redirect("/login")
 
 # End of CRUD for users        
 
@@ -169,7 +207,7 @@ def all_companies():
     allCompanies = Company.query.all()
     return render_template("Companies.html", companies = allCompanies)
 
-@app.route("/comnpanies/create", methods=["POST"])
+@app.route("/companies/create", methods=["POST"])
 def create_company():
     picture = request.form.get('picture', "")
     name = request.form.get('name', "")
@@ -183,7 +221,7 @@ def create_company():
     newCompany= Company(picture, name, bio, specialization, username, email, password)
     db.session.add(newCompany)
     db.session.commit()
-    return redirect("/companies/") 
+    return redirect("/login") 
 
 # read a single comment
 @app.route("/companies/<id>")
