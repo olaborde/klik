@@ -21,19 +21,51 @@ h2 {
 
 } 
 </style>
-<div class="container-wrapper container d-flex justify-content-center align-items-center gradient-styles">
-    <div class="form-wrapper text-center">
-      <h2 class="text-center">Login</h2>
-      <form action="/login" method="POST">
-        <div class="form-group">
-          <input type="text" class="form-control" id="username-input" placeholder="Enter username" name="username">
-        </div>
-        <div class="form-group">
-          <input type="password" class="form-control" id="password-input" placeholder="Password" name="password">
-        </div>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-      </form>
-      <small><a href="/signup_user">Need an Account?</a></small>
+
+
+<div class="container-wrapper container-fluid d-flex justify-content-center align-items-center gradient-styles container-fluid">
+  <div class="form-wrapper text-center">
+    <h2 class="text-center">Login</h2>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="Customer-tab" data-toggle="tab" href="#Customer" role="tab" aria-controls="Customer" aria-selected="true">Customer</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="company-tab" data-toggle="tab" href="#company" role="tab" aria-controls="company" aria-selected="false">company</a>
+      </li>
+     
+    </ul>
+    <br>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="Customer" role="tabpanel" aria-labelledby="Customer-tab">
+        <form action="/login" method="POST">
+          <div class="form-group">
+            <input type="text" class="form-control" id="username-input" placeholder="Enter username" name="username">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password-input" placeholder="Password" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+      </div>
+      <div class="tab-pane fade" id="company" role="tabpanel" aria-labelledby="company-tab">
+        <form action="/company_login" method="POST">
+          <div class="form-group">
+            <input type="text" class="form-control" id="username-input" placeholder="Enter username" name="username">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password-input" placeholder="Password" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+        
+      </div>
+ 
     </div>
+   
+    <small><a href="/signup_user">Need an Account?</a></small>
   </div>
+</div> 
+
 {% endblock %}
+
