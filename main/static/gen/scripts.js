@@ -26,10 +26,10 @@
   });
 
   // Activate scrollspy to add active class to navbar items on scroll
-  $('body').scrollspy({
-    target: '#mainNav',
-    offset: 75
-  });
+  // $('body').scrollspy({
+  //   target: '#mainNav',
+  //   offset: 75
+  // });
 
   // Collapse Navbar
   var navbarCollapse = function() {
@@ -45,19 +45,30 @@
   $(window).scroll(navbarCollapse);
 
   // Magnific popup calls
-  $('#portfolio').magnificPopup({
-    delegate: 'a',
-    type: 'image',
-    tLoading: 'Loading image #%curr%...',
-    mainClass: 'mfp-img-mobile',
-    gallery: {
-      enabled: true,
-      navigateByImgClick: true,
-      preload: [0, 1]
-    },
-    image: {
-      tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
-    }
-  });
+  // $('#portfolio').magnificPopup({
+  //   delegate: 'a',
+  //   type: 'image',
+  //   tLoading: 'Loading image #%curr%...',
+  //   mainClass: 'mfp-img-mobile',
+  //   gallery: {
+  //     enabled: true,
+  //     navigateByImgClick: true,
+  //     preload: [0, 1]
+  //   },
+  //   image: {
+  //     tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+  //   }
+  // });
 
 })(jQuery); // End of use strict
+
+
+function editProfile() {
+var mainFrameOne = document.getElementById("profile_view"); 
+   var mainFrameTwo = document.getElementById("profile_edit");
+
+   mainFrameOne.style.display = (
+       mainFrameOne.style.display == "none" ? "block" : "none"); 
+   mainFrameTwo.style.display = (
+       mainFrameTwo.style.display == "none" ? "block" : "none"); 
+}

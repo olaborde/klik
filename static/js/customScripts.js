@@ -1,0 +1,5 @@
+
+function editProfile(){
+
+    alert("Test")
+}

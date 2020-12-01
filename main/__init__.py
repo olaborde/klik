@@ -14,7 +14,7 @@ login_manager.login_view = 'login'
 
 assets = Environment(app)
 login_manager.login_message_category = 'info'
-js = Bundle('./js/script.js',
+js = Bundle('./js/script.js','./js/customScripts.js',
             output='gen/scripts.js')
 assets.register('js_all', js)
 css = Bundle('./css/styles.css',
