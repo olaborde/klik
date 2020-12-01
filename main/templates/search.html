@@ -1,0 +1,17 @@
+{% block title %} Search {% endblock %} {% block content %}
+<form action="/companies/search" method="POST"
+ style="margin:auto;max-width:600px">
+    <input type="text" placeholder="Search by company name" name="companyName">
+    <button type="submit">Search
+    </button>
+</form>
+
+<center>
+{% for item in data %}
+    <tr>
+        <td> {{item[0]}} by {{item[1]}}</td>
+        </br>
+    </tr>
+{% endfor %}
+</center>
+{% endblock %} 

@@ -3,6 +3,12 @@ from flask import render_template, url_for, flash, redirect, request, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from main import app, db, login_manager
 from main.models import Company, User, Comment
+from sqlalchemy import create_engine
+
+
+engine = create_engine('sqlite:///database.db')
+conn = engine.raw_connection()
+cursor = conn.cursor()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -169,7 +175,7 @@ def all_companies():
     allCompanies = Company.query.all()
     return render_template("Companies.html", companies = allCompanies)
 
-@app.route("/comnpanies/create", methods=["POST"])
+@app.route("/companies/create", methods=["POST"])
 def create_company():
     picture = request.form.get('picture', "")
     name = request.form.get('name', "")
@@ -218,4 +224,21 @@ def delete_company(id):
     db.session.commit()
     return redirect("/companies/")
 
-# End of CRUD for Company        
+
+# Recently search bar route, by Jose
+@app.route('/companies/search', methods=['GET', 'POST'])
+def search():
+    if request.method == "POST":
+        companyName = request.form.get('companyName')
+        query_stmt = 'SELECT name FROM "{}" WHERE name LIKE %s'.format("company".replace('"', '""'))
+        cursor.execute(query_stmt, companyName)
+        conn.commit()
+        data = cursor.fetchall()
+        # All in the search box will return all the tuples
+        if len(data) == 0 and companyName == 'all': 
+            cursor.execute("SELECT * from company")
+            conn.commit()
+            data = cursor.fetchall()
+        return render_template('search.html', data=data)
+    return render_template('search.html')
+# end point for inserting data dynamicaly in the database
