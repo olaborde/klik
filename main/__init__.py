@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+
 from flask_assets import Environment, Bundle
 from flask_bcrypt import Bcrypt
 from datetime import datetime # newly added
 from flask_login import LoginManager
+
 
 app = Flask(__name__)
 app.config["DEBUG"] = True

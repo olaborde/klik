@@ -7,14 +7,13 @@
             <ul class="navbar-nav ml-auto my-2 my-lg-0">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/dashboard">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/profile">profile</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/profile">Profile</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/logout">Logout</a></li>
                 {% else %}
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('login') }}">Login</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('signup_user') }}">Sign Up</a></li>
                 {% endif %}
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">About</a></li>
-                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
             </ul>
         </div>
     </div>
