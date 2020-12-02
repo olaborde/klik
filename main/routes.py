@@ -266,10 +266,11 @@ def delete_company(id):
 # Recently search bar route, by Jose
 @app.route('/companies/search', methods=['GET', 'POST'])
 def search():
-    if request.method == "POST":
-        companyName = request.form.get('companyName')
-        query_stmt = 'SELECT name FROM "{}" WHERE name LIKE %s'.format("company".replace('"', '""'))
-        cursor.execute(query_stmt, companyName)
+    companyName = request.args.get('companyName',"")
+    if companyName != "":
+        query_stmt = "SELECT * FROM company WHERE name LIKE '%{}%';".format(companyName.replace('"', '""'))
+        cursor = conn.cursor()
+        cursor.execute(query_stmt)
         conn.commit()
         data = cursor.fetchall()
         # All in the search box will return all the tuples

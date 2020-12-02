@@ -1,9 +1,8 @@
-{% block title %} Search {% endblock %} {% block content %}
-<form action="/companies/search" method="POST"
+{% block title %} About {% endblock %} {% block content %}
+<form action="/companies/search" method="GET"
  style="margin:auto;max-width:600px">
     <input type="text" placeholder="Search by company name" name="companyName">
-    <button type="submit">Search
-    </button>
+    <button type="submit">Search</button>
 </form>
 
 <center>
