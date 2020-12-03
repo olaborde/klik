@@ -6,9 +6,9 @@ from main.models import Company, User, Comment
 from sqlalchemy import create_engine
 
 
-engine = create_engine('sqlite:///database.db')
+engine = create_engine('sqlite:///database.db', connect_args={'check_same_thread': False})
 conn = engine.raw_connection()
-cursor = conn.cursor()
+# cursor = conn.cursor()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -32,6 +32,8 @@ def dashboard():
 @login_required
 def profile():
     return render_template('profile.html', user = current_user)
+
+
 
 # @app.route("/signup")
 # def signup():
@@ -264,6 +266,7 @@ def delete_company(id):
 
 
 # Recently search bar route, by Jose
+@app.route("/search", methods=['GET', 'POST'])
 @app.route('/companies/search', methods=['GET', 'POST'])
 def search():
     companyName = request.args.get('companyName',"")
