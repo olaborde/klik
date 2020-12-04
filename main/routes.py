@@ -10,9 +10,24 @@ engine = create_engine('sqlite:///database.db', connect_args={'check_same_thread
 conn = engine.raw_connection()
 # cursor = conn.cursor()
 
+# @login_manager.user_loader
+# def load_user(user_id, session):
+#   if session['role_type'] == 'Company':
+#       return Company.query.get(int(user_id))
+#   elif session['role_type'] == 'User':
+#       return User.query.get(int(user_id))
+#   else:
+#       return None
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+# @login_manager.user_loader
+# def load_user(user_id,role_type):
+#     if role_type == 'company':
+#         return Company.query.get(user_id)
+#     return User.query.get(user_id)    
+
 
 @app.route("/home")
 @app.route("/")
@@ -56,10 +71,14 @@ def login():
 @app.route("/company_login", methods=['GET', 'POST'])
 def company_login():
     if request.method == "POST":
+        print("--------------Post method----------------------")
         username = request.form.get("username", "")
         password = request.form.get("password", "")
+        print("-------------Username --> "+username+"-----------Password-->"+password+"-----------------")
         company = Company.query.filter_by( username = username, password = password ).first()
+        
         if company:
+            print("--------------Company is not empty----------------------")
             login_user(company)
             return redirect("/dashboard")
         else:
@@ -81,14 +100,15 @@ def all_comments():
 
 @app.route("/comments/create", methods=["POST"])
 def create_comments():
+    companyName = request.form.get('companyName', "")
+    user_id = request.form.get('user_id', "")
     feedback = request.form.get('feedback', "")
     companyName = request.form.get('companyName', "")
     rating = request.form.get('rating', "")
-   
-    newComment = Comment(feedback, companyName, rating)
+    newComment = Comment(feedback, companyName, rating, user_id)
     db.session.add(newComment)
     db.session.commit()
-    return redirect("/comments/")   
+    return redirect("/")   
 
 # read a single comment
 @app.route("/comments/<id>")
@@ -143,6 +163,7 @@ def signup_user():
         newUser= User(picture, fname, lname, bio, username, email, password)
         db.session.add(newUser)
         db.session.commit()
+        # session['role_type'] == 'user'
         return redirect("/login") 
     else:
         return render_template('signup.html') 
@@ -281,6 +302,6 @@ def search():
             cursor.execute("SELECT * from company")
             conn.commit()
             data = cursor.fetchall()
-        return render_template('search.html', data=data)
+        return render_template('search.html', data=data, user = current_user)
     return render_template('search.html')
 # end point for inserting data dynamicaly in the database

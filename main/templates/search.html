@@ -32,7 +32,7 @@ img {
             <div class="input-group md-form form-sm form-2 pl-0">
                 <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search..." aria-label="Search" name="companyName">
                 <div class="input-group-append">
-                    <button class="input-group-text red lighten-3" id="basic-text1">Search</button>
+                    <button class="btn btn-primary" id="basic-text1">Search</button>
                 </div>
             </form>
 
@@ -60,7 +60,7 @@ img {
       </div>
 </div>
 
-<!-- Modal -->
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -71,7 +71,15 @@ img {
           </button>
         </div>
         <div class="modal-body">
-            <form action="/company_login" method="POST">
+            <form action="/comments/create" method="POST">
+                {% for item in data %}
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="companyName-input" value="{{item[2]}}" name="companyName">
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="user_id-input" value="{{current_user.id}}" name="user_id">
+                </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="feedback-input" placeholder="Enter feedback" name="feedback">
                 </div>
