@@ -72,3 +72,8 @@ var mainFrameTwo = document.getElementById("profile_edit");
    mainFrameTwo.style.display = (
        mainFrameTwo.style.display == "none" ? "block" : "none"); 
 }
+
+
+function activaTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};

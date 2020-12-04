@@ -1,7 +1,6 @@
-
-from datetime import datetime # newly added
+from datetime import datetime 
 from main import db
-from flask_login import UserMixin # to manage the session 
+from flask_login import UserMixin 
 
 class User( UserMixin, db.Model ):
     id = db.Column(db.Integer, primary_key=True)
@@ -12,11 +11,10 @@ class User( UserMixin, db.Model ):
     username = db.Column(db.String(10))
     email = db.Column(db.String(50))
     password = db.Column(db.String(20))
+    role_type = db.Column(db.String(20), default="user" )
 
-    # relationships
-    # company = db.relationship( "Company", backref="user" )
-    comments = db.relationship( "Comment", backref="user" )
-    # orders = db.relationship('Order', backref='customer')
+    comments = db.relationship( "Comment", backref="user", lazy=True )
+   
     def __init__(self, picture, fname, lname, bio, username, email, password):
         self.picture = picture
         self.fname = fname
@@ -42,11 +40,10 @@ class Company( UserMixin, db.Model ):
     username = db.Column(db.String(10))
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(20))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    role_type = db.Column(db.String(20), default="company" )
 
-    # relationships
-    # comment = db.relationship( "Comment", backref="Company" )
-    comment = db.relationship('Comment', secondary=company_comment)
+    #Relationship
+    comments = db.relationship('Comment', secondary=company_comment, backref='company_review')
 
     def __init__(self, picture, name, bio, specialization, username, email, password):
         self.picture = picture
@@ -64,16 +61,14 @@ class Comment( db.Model ):
     commment_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow ) # newly added
     feedback = db.Column(db.Text())
     companyName = db.Column(db.String(100))
-    rating = db.Column(db.Float, primary_key=True)
+    rating = db.Column(db.Float)
 
     # relationships
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    company = db.relationship('Company', secondary= company_comment)
+    # company = db.relationship('Company', secondary= company_comment)
     
-    # comment = db.relationship( "Comment", backref="company" )
 
-    def __init__(self, id, feedback, companyName, rating, user_id):
-        self.id = id
+    def __init__(self, feedback, companyName, rating, user_id):
         self.feedback = feedback
         self.companyName = companyName
         self.rating = rating
