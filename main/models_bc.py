@@ -2,38 +2,20 @@ from datetime import datetime
 from main import db
 from flask_login import UserMixin 
 
-class Base(db.Model):
-    __abstract__ = True
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime,default=datetime.now, onupdate=datetime.now)
-class UserBase(Base, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(10), nullable=False, unique=True)
-    email = db.Column(db.String(50), nullable=False, unique=True)
-    password = db.Column(db.String(20))
-
-    
-
-class User(UserMixin, db.Model):
+class xUser( UserMixin, db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     fname = db.Column(db.String(100))
     lname = db.Column(db.String(100))
     bio = db.Column(db.Text())
-    username = db.Column(db.String(10), nullable=False, unique=True)
-    email = db.Column(db.String(50), nullable=False, unique=True)
+    username = db.Column(db.String(10))
+    email = db.Column(db.String(50))
     password = db.Column(db.String(20))
-
-    # username = db.Column(db.String(10))
     role_type = db.Column(db.String(20), default="user" )
-    comments = db.relationship( "Comment", backref="user", lazy=True )
-    updated_at = db.Column(db.DateTime, nullable = False, default=datetime.utcnow )
-    created_at = db.Column(db.DateTime, nullable = False, default=datetime.utcnow )
 
- 
+    comments = db.relationship( "Comment", backref="user", lazy=True )
    
     def __init__(self, picture, fname, lname, bio, username, email, password):
-        
         self.picture = picture
         self.fname = fname
         self.lname = lname
@@ -41,7 +23,6 @@ class User(UserMixin, db.Model):
         self.username = username
         self.email = email
         self.password = password
-         
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.bio}')"   
 
@@ -50,25 +31,21 @@ company_comment = db.Table('company_comment',
        db.Column('comment_id', db.Integer, db.ForeignKey('comment.id'), primary_key=True )
 )
 
-class Company(UserMixin, db.Model):
+class Company( UserMixin, db.Model ):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(100))
     bio = db.Column(db.Text())
     specialization = db.Column(db.String(100))
-    username = db.Column(db.String(10), nullable=False, unique=True)
+    username = db.Column(db.String(10))
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(20))
-
     role_type = db.Column(db.String(20), default="company" )
-    updated_at = db.Column(db.DateTime, nullable = False, default=datetime.utcnow )
-    created_at = db.Column(db.DateTime, nullable = False, default=datetime.utcnow )
 
     #Relationship
     comments = db.relationship('Comment', secondary=company_comment, backref='company_review')
 
     def __init__(self, picture, name, bio, specialization, username, email, password):
-        
         self.picture = picture
         self.name = name
         self.bio = bio
@@ -76,6 +53,8 @@ class Company(UserMixin, db.Model):
         self.username = username
         self.email = email
         self.password = password
+
+
 
 class Comment( db.Model ):
     id = db.Column(db.Integer, primary_key=True)
