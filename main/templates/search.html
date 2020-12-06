@@ -45,11 +45,11 @@ img {
         <div class="col-sm-6">
           {% for item in data %}
           <div class="card">
-            <img class="rounded-circle " alt="100x100" src="{{item[1]}}"
+            <img class="rounded-circle " alt="100x100" src="{{item[4]}}"
             data-holder-rendered="true">
             <div class="card-body">
-              <h5 class="card-title">{{item[2]}}</h5>
-              <p class="card-text">{{item[3]}}</p>
+              <h5 class="card-title">{{item[5]}}</h5>
+              <p class="card-text">{{item[6]}}</p>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Add a Review
                 </button>
@@ -74,7 +74,7 @@ img {
             <form action="/comments/create" method="POST">
                 {% for item in data %}
                 <div class="form-group">
-                    <input type="hidden" class="form-control" id="companyName-input" value="{{item[2]}}" name="companyName">
+                    <input type="hidden" class="form-control" id="companyName-input" value="{{item[5]}}" name="companyName">
                 </div>
                 {% endfor %}
                 <div class="form-group">
