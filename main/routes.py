@@ -1,15 +1,15 @@
 
-from flask import render_template, url_for, flash, redirect, request, session 
+from flask import render_template, url_for, flash, redirect, request, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from main import app, db, login_manager
 from main.models import User, Company, Comment
 from sqlalchemy import create_engine
 
 
+
 engine = create_engine('sqlite:///database.db', connect_args={'check_same_thread': False})
 conn = engine.raw_connection()
 # cursor = conn.cursor()
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -32,10 +32,12 @@ def index():
 def about():
     return render_template('about.html')
 
-@app.route("/dashboard")
+@app.route("/dashboard",  methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
+    print('%%%%%%%%%%%%%%%%%%')
+    return render_template('dashboard.html', company_review=company_review)
 
 @app.route("/profile")
 @login_required
@@ -183,10 +185,10 @@ def update_user():
 
 # read a single comment
 @app.route("/users/<id>")
-def get_user(id):
+def singleUser(id):
     user = User.query.get( id )
     #TODO: Create view for comment
-    return render_template("comment.html", user = user)     
+    return render_template("singleUser.html", user = user)     
 
 #Update user
 @app.route("/users/<id>/edit", methods=["GET", "POST"])

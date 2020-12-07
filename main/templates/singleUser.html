@@ -1,0 +1,87 @@
+{% extends "base.html" %} {% block title %} About {% endblock %} {% block content %}
+<br>
+<br>
+<br>
+
+<style>
+    body {
+        /* background: -webkit-linear-gradient(left, #3931af, #00c6ff); */
+        background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(121, 76, 9, 1) 46%, rgba(0, 212, 255, 1) 100%);
+    }
+
+    /* button{
+    display: block;
+    width: 100%;
+    padding-right: 80%;
+    margin: 14px 0;
+} */
+    .profile-edit-btn {
+        position: relative;
+        width: 120px;
+        display: block;
+        position: relative;
+        margin-top: 100px;
+        /* margin-left: 50%; */
+        text-align: center;
+        height: auto;
+        position: relative;
+        transition: all .5s ease-in-out;
+        /* width:85%;
+    height: 100%; */
+    }
+</style>
+<div class="container emp-profile">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-img">
+                <img src="{{user.picture}}" alt="" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="profile-head">
+                <h5>
+                    {{user.fname}} {{user.lname}}
+                </h5>
+                <div id="profile_view" >
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Username</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{user.username}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{user.fname}} {{user.lname}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Email</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{user.email}}</p>
+                        </div>
+
+                    </div>
+                </div>
+       
+            </div>
+        </div>
+   
+
+
+
+</div>
+
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/customScripts.js">
+</script>{% endblock %}
