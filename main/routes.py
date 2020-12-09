@@ -4,9 +4,10 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from main import app, db, login_manager
 from main.models import User, Company, Comment
 from sqlalchemy import create_engine
+import flask_excel as excel
 
 
-
+excel.init_excel(app) # required since version 0.0.7
 engine = create_engine('sqlite:///database.db', connect_args={'check_same_thread': False})
 conn = engine.raw_connection()
 # cursor = conn.cursor()
@@ -36,7 +37,7 @@ def about():
 @login_required
 def dashboard():
     company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
-    print('%%%%%%%%%%%%%%%%%%')
+    print('%%%%%%%%%%%%%%%%%%', company_review)
     return render_template('dashboard.html', company_review=company_review)
 
 @app.route("/profile")
@@ -296,3 +297,11 @@ def search():
         return render_template('search.html', data=data, user = current_user)
     return render_template('search.html')
 # end point for inserting data dynamicaly in the database
+
+# Export review to excel
+@app.route("/export", methods=['GET'])
+def doexport():
+    column_names = ['feedback', 'rating', 'user_id', 'commment_date']
+    company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
+ 
+    return excel.make_response_from_query_sets(company_review, column_names, "xls")
