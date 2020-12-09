@@ -19,7 +19,7 @@ login_manager.login_message_category = 'info'
 js = Bundle('./js/script.js','./js/customScripts.js',
             output='gen/scripts.js')
 assets.register('js_all', js)
-css = Bundle('./css/styles.css',
+css = Bundle('./css/styles.css', './css/dashboard.css' ,
             output='gen/styles.css')
 assets.register('css_all', css)
 
