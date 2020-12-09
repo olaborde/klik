@@ -1,32 +1,26 @@
 
-from flask import render_template, url_for, flash, redirect, request, session 
+from flask import render_template, url_for, flash, redirect, request, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from main import app, db, login_manager
-from main.models import Company, User, Comment
+from main.models import User, Company, Comment
 from sqlalchemy import create_engine
+
 
 
 engine = create_engine('sqlite:///database.db', connect_args={'check_same_thread': False})
 conn = engine.raw_connection()
 # cursor = conn.cursor()
 
-# @login_manager.user_loader
-# def load_user(user_id, session):
-#   if session['role_type'] == 'Company':
-#       return Company.query.get(int(user_id))
-#   elif session['role_type'] == 'User':
-#       return User.query.get(int(user_id))
-#   else:
-#       return None
-
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
-# @login_manager.user_loader
-# def load_user(user_id,role_type):
-#     if role_type == 'company':
-#         return Company.query.get(user_id)
-#     return User.query.get(user_id)    
+    login_type = session.get('login_type')
+   
+    if login_type == 'user':
+        return User.query.get(user_id)
+    elif login_type == 'company':
+        return Company.query.get(user_id)
+    else:
+        return User.get(user_id)   
 
 
 @app.route("/home")
@@ -38,21 +32,18 @@ def index():
 def about():
     return render_template('about.html')
 
-@app.route("/dashboard")
+@app.route("/dashboard",  methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
+    print('%%%%%%%%%%%%%%%%%%')
+    return render_template('dashboard.html', company_review=company_review)
 
 @app.route("/profile")
 @login_required
 def profile():
     return render_template('profile.html', user = current_user)
 
-
-
-# @app.route("/signup")
-# def signup():
-#     return render_template('signup.html')
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -61,6 +52,7 @@ def login():
         password = request.form.get("password", "")
         user = User.query.filter_by( username = username, password = password ).first()
         if user:
+            session['login_type'] = 'user'
             login_user(user)
             return redirect("/profile")
         else:
@@ -71,14 +63,13 @@ def login():
 @app.route("/company_login", methods=['GET', 'POST'])
 def company_login():
     if request.method == "POST":
-        print("--------------Post method----------------------")
+        
         username = request.form.get("username", "")
         password = request.form.get("password", "")
-        print("-------------Username --> "+username+"-----------Password-->"+password+"-----------------")
         company = Company.query.filter_by( username = username, password = password ).first()
         
         if company:
-            print("--------------Company is not empty----------------------")
+            session['login_type'] = 'company'
             login_user(company)
             return redirect("/dashboard")
         else:
@@ -194,10 +185,10 @@ def update_user():
 
 # read a single comment
 @app.route("/users/<id>")
-def get_user(id):
+def singleUser(id):
     user = User.query.get( id )
     #TODO: Create view for comment
-    return render_template("comment.html", user = user)     
+    return render_template("singleUser.html", user = user)     
 
 #Update user
 @app.route("/users/<id>/edit", methods=["GET", "POST"])
