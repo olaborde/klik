@@ -67,6 +67,7 @@ class Company(UserMixin, db.Model):
         self.password = password
 
 class Comment( db.Model ):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     id = db.Column(db.Integer, primary_key=True)
     commment_date = db.Column(db.DateTime, nullable = False, default=datetime.utcnow ) # newly added
     feedback = db.Column(db.Text())
@@ -74,9 +75,7 @@ class Comment( db.Model ):
     rating = db.Column(db.Float)
 
     # relationships
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    # company = db.relationship('Company', secondary= company_comment)
-    
+    company = db.relationship('Company', secondary= company_comment)
 
     def __init__(self, feedback, companyName, rating, user_id):
         self.feedback = feedback
