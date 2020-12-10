@@ -257,22 +257,22 @@ def get_company(id):
     return render_template("comment.html", company = company)     
 
 #Update company
-@app.route("/companies/<id>/edit", methods=["GET", "POST"])
-def edit_comnpany(id):
-    company = Company.query.get( int(id) )
-    if request == "Post":
-        picture = request.form.get('picture', "")
-        name = request.form.get('name', "")
-        bio = request.form.get('bio', "")
-        specialization = request.form.get('specialization', "")
-        username = request.form.get('username', "")
-        email = request.form.get('email', "")
-        password = request.form.get('password', "")
+@app.route("/companies/update", methods=["POST"])
+def edit_comnpany():
+    company_id = request.form.get("company_id")
+    company = Company.query.filter_by( id=company_id).first()
+    
+    company.picture = request.form.get('picture', "")
+    company.name = request.form.get('name', "")
+    company.bio = request.form.get('bio', "")
+    company.specialization = request.form.get('specialization', "")
+    company.username = request.form.get('username', "")
+    company.email = request.form.get('email', "")
+    companypassword = request.form.get('password', "")
         
-        db.session.commit()
-        return render_template("company.html", company = company)
-    else:
-        return render_template("edit_company.html", company = company)
+    db.session.commit()
+    return redirect("/dashboard")
+
 
 # Delete company
 @app.route("/companies/<id>/delete", methods=["POST"])
