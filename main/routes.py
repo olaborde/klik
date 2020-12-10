@@ -4,9 +4,10 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from main import app, db, login_manager
 from main.models import User, Company, Comment
 from sqlalchemy import create_engine
+import flask_excel as excel
 
 
-
+excel.init_excel(app) # required since version 0.0.7
 engine = create_engine('sqlite:///database.db', connect_args={'check_same_thread': False})
 conn = engine.raw_connection()
 # cursor = conn.cursor()
@@ -37,6 +38,15 @@ def about():
 def dashboard():
     company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
     return render_template('dashboard.html', company_review=company_review)
+
+    print('%%%%%%%%%%%%%%%%%%', company_review)
+    ratings = []
+    average_rating = None
+    for comments in company_review:
+        ratings.append(comments.rating)
+        average_rating = sum(ratings) / len(ratings)
+    return render_template('dashboard.html', company_review=company_review, average= average_rating)
+
 
 @app.route("/profile")
 @login_required
@@ -266,22 +276,22 @@ def get_company(id):
     return render_template("comment.html", company = company)     
 
 #Update company
-@app.route("/companies/<id>/edit", methods=["GET", "POST"])
-def edit_comnpany(id):
-    company = Company.query.get( int(id) )
-    if request == "Post":
-        picture = request.form.get('picture', "")
-        name = request.form.get('name', "")
-        bio = request.form.get('bio', "")
-        specialization = request.form.get('specialization', "")
-        username = request.form.get('username', "")
-        email = request.form.get('email', "")
-        password = request.form.get('password', "")
+@app.route("/companies/update", methods=["POST"])
+def edit_comnpany():
+    company_id = request.form.get("company_id")
+    company = Company.query.filter_by( id=company_id).first()
+    
+    company.picture = request.form.get('picture', "")
+    company.name = request.form.get('name', "")
+    company.bio = request.form.get('bio', "")
+    company.specialization = request.form.get('specialization', "")
+    company.username = request.form.get('username', "")
+    company.email = request.form.get('email', "")
+    companypassword = request.form.get('password', "")
         
-        db.session.commit()
-        return render_template("company.html", company = company)
-    else:
-        return render_template("edit_company.html", company = company)
+    db.session.commit()
+    return redirect("/dashboard")
+
 
 # Delete company
 @app.route("/companies/<id>/delete", methods=["POST"])
@@ -311,3 +321,11 @@ def search():
         return render_template('search.html', data=data, user = current_user)
     return render_template('search.html')
 # end point for inserting data dynamicaly in the database
+
+# Export review to excel
+@app.route("/export", methods=['GET'])
+def doexport():
+    column_names = ['feedback', 'rating', 'user_id', 'commment_date']
+    company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
+ 
+    return excel.make_response_from_query_sets(company_review, column_names, "xls")
