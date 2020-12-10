@@ -1,2 +1,8 @@
 cpython-37.pyc
 cpython-39.pyc
+
+main/__pycache__/__init__.cpython-38.pyc
+main/__pycache__/main.cpython-38.pyc
+main/__pycache__/models.cpython-38.pyc
+main/__pycache__/routes.cpython-38.pyc
+main/database.db
