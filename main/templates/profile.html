@@ -9,26 +9,20 @@
         background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(121, 76, 9, 1) 46%, rgba(0, 212, 255, 1) 100%);
     }
 
-    /* button{
-    display: block;
-    width: 100%;
-    padding-right: 80%;
-    margin: 14px 0;
-} */
     .profile-edit-btn {
+        flex-direction: row;
         position: relative;
         width: 120px;
-        display: block;
-        position: relative;
-        margin-top: 100px;
-        /* margin-left: 50%; */
+        margin-left: 50%;
+        right: 50%;
         text-align: center;
-        height: auto;
-        position: relative;
-        transition: all .5s ease-in-out;
-        /* width:85%;
-    height: 100%; */
+        font-size: 14px !important;
     }
+
+    /* .col-6, .col-7{
+        flex: auto;
+        bottom: 10px;
+    } */
 </style>
 <div class="container emp-profile">
 
@@ -52,28 +46,10 @@
                 </h6>
                 <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Reviews</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" data-toggle="pill" id="home-tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="pill" id="profile-tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Reviews</a></li>
+                </ul>
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="row">
-                <div class="col-6">
-                    <button onclick="editProfile()" class="profile-edit-btn btn btn-primary" name="btnAddMore">Edit
-                        Profile</button>
-                </div>
-                <div class="col-6">
-                    <form action="/users/{{current_user.id}}/delete" method="post">
-                        <button class="profile-edit-btn btn btn-danger" onclick="return confirm('Are you sure?')"
-                            name="btnAddMore">Delete</button>
-                    </form>
-                </div>
-            </div>
-
         </div>
 
 
@@ -87,13 +63,28 @@
                         <button class="profile-edit-btn btn btn-danger" onclick="return confirm('Are you sure?')" name="btnAddMore" >Delete</button>
                     </form> -->
                 <div class="col-md-2">
-
                 </div>
             </div>
         </div>
+
         <div class="col-md-8">
-            <div class="tab-content profile-tab" id="myTabContent" role="tabpanel"  id="home" aria-labelledby="home-tab" >
-                <div class="tab-pane fade show active"   >
+            <div class="tab-content">
+            <div class="tab-pane fade in active" id="home" role="tabpanel" aria-labelledby="home-tab" >
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-6">
+                            <button onclick="editProfile()" class="profile-edit-btn btn btn-primary" name="btnAddMore">Edit
+                                Profile</button>
+                        </div>
+                        <div class="col-7">
+                            <form action="/users/{{current_user.id}}/delete" method="post">
+                                <button class="profile-edit-btn btn btn-danger" onclick="return confirm('Are you sure?')"
+                                    name="btnAddMore">Delete Profile</button>
+                            </form>
+                        </div>
+                    </div>
+                    <br>
+                </div>
                     <div id="profile_view" >
                         <div class="row">
                             <div class="col-md-6">
@@ -118,7 +109,7 @@
                             <div class="col-md-6">
                                 <p>{{current_user.email}}</p>
                             </div>
-    
+   
                         </div>
                     </div>
                     <!-- Edit view -->
@@ -198,75 +189,79 @@
                         </form>
                     </div>
                     <!-- Enf of edit view -->
-            </div> 
             <!-- End of About -->
 
-                
+            
                 <!-- <div class="container h-100">   -->
-                <div class="input-group md-form form-sm form-2 pl-0">
-                    <form method="GET" action="/companies/search">
-                        <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search..."
-                            aria-label="Search" name="companyName">
-                        <div class="input-group-append">
-                            <button class="input-group-text red lighten-3" id="basic-text1">Submit<i
-                                    class="fas fa-search"></i></button>
-                        </div>
-                    </form>
-                </div>
                 <!-- </div> -->
             </div>
+            <!-- View Comments -->
+            <div class="tab-pane fade" id="profile">
+                <table class="table table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>Feedback</th>
+                      <th>Rating</th>
+                      <th>Company</th>
+                      <th>Posted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for review in user_review %}
+                   
+                    <tr>
+                      <td>{{review.feedback}}</td>
+                      <td>{{review.rating}}</td>
+                      <td><a href="{{ url_for('singleUser', id=review.user.id) }}" >{{review.user.companyName}}</a></td>
+                      <td>{{review.commment_date.strftime('%m/%d/%Y  %I:%M')}}</td>
+                      <td><button onclick="editComment()" class="comment-edit-btn btn btn-primary" name="btnAddMore">Edit</button></td> 
+                      <td><form action="/comments/{{review.id}}/delete" method="post">
+                                <button class="comment-edit-btn btn btn-danger" onclick="return confirm('Are you sure?')"
+                                    name="btnAddMore">Delete</button>
+                            </form></td>
+                    </tr>
+                  
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- Edit Comments -->
+              <div id="comment_edit" style="display:none">
+                <form action="/comments/update" method="POST">
+                    {% for review in user_review %}
+                    <input type="hidden" value="{{current_user.id}}" name="user_id">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Feedback</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="feedback-input2"
+                                value={{review.feedback}} name="feedback">
+                        </div>
+                    </div>
 
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Experience</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Rating</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p> <input type="text" class="form-control" id="rating-input2"
+                                    value="{{review.rating}}" name="rating"> </p>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <p>Expert</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Hourly Rate</label>
-                    </div>
-                    <div class="col-md-6">
-                        <p>10$/hr</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Total Projects</label>
-                    </div>
-                    <div class="col-md-6">
-                        <p>230</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>English Level</label>
-                    </div>
-                    <div class="col-md-6">
-                        <p>Expert</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Availability</label>
-                    </div>
-                    <div class="col-md-6">
-                        <p>6 months</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label>Your Bio</label><br />
-                        <p>Your detail description</p>
-                    </div>
-                </div>
+                </form>
+                {% endfor %}
             </div>
+            <!-- End of Comment edit -->
         </div>
     </div>
-</div>
+   </div>
 
 
 </div>

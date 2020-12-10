@@ -14,7 +14,7 @@ class UserBase(Base, UserMixin):
 
     
 
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     fname = db.Column(db.String(100))
@@ -50,7 +50,7 @@ company_comment = db.Table('company_comment',
        db.Column('comment_id', db.Integer, db.ForeignKey('comment.id'), primary_key=True )
 )
 
-class Company(UserMixin, db.Model):
+class Company(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     picture = db.Column(db.String(100))
     name = db.Column(db.String(100), nullable=False, unique=True)
