@@ -21,7 +21,7 @@ def load_user(user_id):
     elif login_type == 'company':
         return Company.query.get(user_id)
     else:
-        return User.get(user_id)   
+        return User.query.get(user_id)   
 
 
 @app.route("/home")
@@ -37,6 +37,8 @@ def about():
 @login_required
 def dashboard():
     company_review = Comment.query.filter((Comment.companyName==current_user.name)).all()
+    return render_template('dashboard.html', company_review=company_review)
+
     print('%%%%%%%%%%%%%%%%%%', company_review)
     ratings = []
     average_rating = None
@@ -45,10 +47,12 @@ def dashboard():
         average_rating = sum(ratings) / len(ratings)
     return render_template('dashboard.html', company_review=company_review, average= average_rating)
 
+
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template('profile.html', user = current_user)
+    user_review = Comment.query.filter((Comment.user_id==current_user.id)).all()
+    return render_template('profile.html', user_review=user_review)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -105,7 +109,22 @@ def create_comments():
     newComment = Comment(feedback, companyName, rating, user_id)
     db.session.add(newComment)
     db.session.commit()
-    return redirect("/")   
+    return redirect("/")
+
+#Update Comment
+@app.route("/comments/update",  methods=["POST"])    
+def update_comments():
+    comments = request.form.get("user_id")
+    updated_companyName = request.form.get('companyName')
+    updated_feedback = request.form.get('feedback')
+    updated_rating = request.form.get('rating')
+
+    comment = Comment.query.filter_by(id=comments).first() 
+    comment.feedback = updated_feedback
+    comment.rating = updated_rating
+    comment.companyName = updated_companyName
+    db.session.commit()
+    return redirect('/profile')
 
 # read a single comment
 @app.route("/comments/<id>")
@@ -114,7 +133,7 @@ def get_comment(id):
     #TODO: Create view for comment
     return render_template("comment.html", comment = comment)     
 
-#Update
+#Update 
 @app.route("/comments/<id>/edit", methods=["GET", "POST"])
 def edit_comment(id):
     comment = Comment.query.get( int(id) )
@@ -131,10 +150,10 @@ def edit_comment(id):
 # Delete
 @app.route("/comments/<id>/delete", methods=["POST"])
 def delete_comment(id):
-    user = User.query.get( int(id) )
-    db.session.delete(user)
+    comment = Comment.query.get( int(id) )
+    db.session.delete(comment)
     db.session.commit()
-    return redirect("/comments/")
+    return redirect("/profile")
 # End of CRUD comment
 
 # CRUD for users    
